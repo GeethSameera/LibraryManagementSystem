@@ -11,5 +11,5 @@ app.listen(port, (err) => {
     return console.log('something bad happened', err)
   }
 
-  console.log(`server is listening to ${port}`)
+  console.log(`Express server is listening to ${port}`)
 })

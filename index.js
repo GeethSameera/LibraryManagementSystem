@@ -1,15 +1,12 @@
 const express = require('express')
 const app = express();
-const cors=require('cors');
-
-app.use(cors());
 
 const port = 3000
-var memberRouter = require('./routes/member');
+// var memberRouter = require('./routes/member');
 var loginRouter = require('./routes/login');
 
-app.use('/member', memberRouter);
-app.use('/login', loginRouter);
+// app.use('/member', memberRouter);
+app.use('/', loginRouter);
 
 app.listen(port, (err) => {
   if (err) {

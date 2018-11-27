@@ -1,12 +1,11 @@
-'use strict'
+'use strict';
 
 var express = require('express');
 var router = express.Router();
+var mysql = require('mysql');
 var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors')
-var loginController  = require('../controllers/loginController');
-var databaseController = require('../controllers/databaseController');
 
 app.use(cors())
 router.use(cors())
@@ -22,17 +21,39 @@ app.use(function (req, res, next) {
   next();
 });
 
+
 router.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
-router.get('/login',loginController.login);
-router.get('/aa',databaseController.connect);
-// router.post('/addJobs',UserController.loginRequired, JobController.addJobs);
-// router.post('/jobimage/:imageid',JobController.uploadImage);
+var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "root",
+    database:"login"
+  });
 
-module.exports = router;
+/* ### upload image for job ## */
+exports.connect = function (req, res) {
+    console.log('###########connect##############'); 
+    let data;
+    con.connect(function(err) {
+        if (err) throw err;
+        con.query("SELECT * FROM login", function (err, result, fields) {
+          if (err) throw err;
+          data={
+            "usename":result[0].userName,
+            "password":result[0].password  
+            };
+          console.log(data);
+        });
+      });
+    return JSON.parse(data);
+}
+
+
+
 
 

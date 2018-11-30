@@ -33,7 +33,7 @@ router.use(function (req, res, next) {
 
 /* ### upload image for job ## */
 exports.login = function (req, res) {
-  console.log('#########################');
+  console.log('#########################',req.body.userVM);
   //console.log(req);
    let message=databaseController.connect;
   return res.status(200).json({message: databaseController.connect()});

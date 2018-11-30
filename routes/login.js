@@ -28,7 +28,7 @@ router.use(function (req, res, next) {
   next();
 });
 
-router.get('/login',loginController.login);
+router.post('/login',loginController.login);
 router.get('/aa',databaseController.connect);
 // router.post('/addJobs',UserController.loginRequired, JobController.addJobs);
 // router.post('/jobimage/:imageid',JobController.uploadImage);

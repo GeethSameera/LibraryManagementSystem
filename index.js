@@ -1,17 +1,18 @@
 const express = require('express')
 const app = express();
 var mysql = require('mysql');
+var bodyParser = require('body-parser');
 
 const port = 3000
-// var memberRouter = require('./routes/member');
 var loginRouter = require('./routes/login');
+var memberRouter = require('./routes/member');
 
 //sql
 const con = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "root",
-  database:"test"
+  database:"login"
 });
 
 con.connect((err)=>{
@@ -24,8 +25,15 @@ con.connect((err)=>{
   }
 })
 
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+
+app.use(bodyParser.json());
+
 // app.use('/member', memberRouter);
 app.use('/', loginRouter);
+app.use('/member/',memberRouter);
 
 app.listen(port, (err) => {
   if (err) {

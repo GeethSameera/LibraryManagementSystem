@@ -1,6 +1,5 @@
 'use strict';
 
-
 var express = require('express');
 var router = express.Router();
 var app = express();
@@ -13,80 +12,81 @@ var Promise = require('promise');
 var util = require('util');
 
 
-// app.use(cors())
-// router.use(cors())
+app.use(cors())
+router.use(cors())
 
 
 // support on x-www-form-urlencoded
-// app.use(bodyParser.urlencoded({
-//   extended: false
-// }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 
-// app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
+app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 
-// app.use(function (req, res, next) {
-//   console.log("req.body"); // populated!
-//   console.log(req.body); // populated!
-//   console.log("req.body"); // populated!
-// });
-
-
-// app.use(function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
+app.use(function (req, res, next) {
+  console.log("req.body"); // populated!
+  console.log(req.body); // populated!
+  console.log("req.body"); // populated!
+});
 
 
-// router.use(function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
-// app.use(router);
 
-/* ### upload image for job ## */
+router.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.use(router);
+
+/* ### login ## */
 exports.login = function (req, res) {
-//   let message=null;
-//   console.log('#########################');
-//   //console.log(req);
-//   function fetch(){
-//     console.log("fetch called");
-//     message=databaseController.getData();
-//   }
-//   const myPromise = new Promise((resolve, reject) => {
-//     message=databaseController.getData();
-//     if (message!==null) {
-//         resolve(message);
-//     }
-//     reject(new Error('No Data'));
-// });
-// console.log(req);
-console.log(req.body)
-console.log(req.originalUrl)
-return res.status(200).json(req.originalUrl);
+  // console.log(req.body)
+  // console.log(req.originalUrl)
+  // return res.status(200).json(req.originalUrl);
 
-let usernameQuery = "SELECT * FROM login";
+  let usernameQuery = "SELECT * FROM login WHERE userName='" + req.body.userName + "'AND password='" + req.body.password + "' ";
   db.query(usernameQuery, (err, result) => {
-    if (err) {
-      return res.status(200).json({message:"No Data Found"});
-    }
+    console.log(result)
+    if (err) //throw err;
+      return res.status(500).json({ userName: "123", password: "Error" });
     // console.log(result,new Date().getTime());
-    return res.status(200).json({message:result});
+    else {
+      if (result[0]) {
+        console.log(result[0].userName);
+        return res.status(200).json({
+          response: {
+            userName: result[0].userName,
+            password: result[0].password
+          },
+          message: "Logged in Successfully",
+          isSuccess: true
+        });
+      }
+      else {
+        return res.status(200).json({
+          response: {
+            userName: "",
+            password: ""
+          },
+          message: "Login Failed.Check Your Credentials And Retry",
+          isSuccess: false
+        });
+      }
+    }
   });
-// myPromise.then((resolvedValue) => {
-//   console.log("resolved",resolvedValue);
-//   return res.status(200).json({message:message});
-// }, (error) => {
-//   console.log(error);
-// });
-
-    // console.log("inside login controller its",new Date().getTime());
-  // imageUplo.uploadImage(req, res, Job, 'jobimages');
 }
+
+
+
 
 
 
@@ -147,7 +147,7 @@ let usernameQuery = "SELECT * FROM login";
 //         }
 //       }
 //     });
-    
+
 //   } else {
 //     res.status(400).json({message: 'no image or body'})
 //   }

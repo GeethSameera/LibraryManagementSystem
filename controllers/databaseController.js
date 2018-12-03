@@ -2,7 +2,6 @@
 
 var express = require('express');
 var router = express.Router();
-var mysql = require('mysql');
 var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors')
@@ -28,32 +27,41 @@ router.use(function (req, res, next) {
   next();
 });
 
-var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database:"login"
-  });
 
 /* ### upload image for job ## */
-exports.connect = function (req, res) {
-    console.log('###########connect##############'); 
-    let data;
-    con.connect(function(err) {
-        if (err) throw err;
-        con.query("SELECT * FROM login", function (err, result, fields) {
-          if (err) throw err;
-          data={
-            "usename":result[0].userName,
-            "password":result[0].password  
-            };
-          console.log(data);
-        });
-      });
-    return JSON.parse(data);
+exports.getData = function (req, res) {
+  console.log('###########connect##############'); 
+  // let data="noData";
+  // con.connect(function(err) {
+  //     if (err) throw err;
+  //     con.query("SELECT * FROM login", function (err, result, fields) {
+  //       if (err) throw err;
+  // return data;
+  // else{
+  //   data={
+  //     "usename":result[0].name,
+  //     "password":result[0].password  
+  //   };
+  // data=result;
+  //   console.log("status of result object is ",data);
+  //   console.log(data);
+  //   return result[0].name ;
+  // }
+  //   });
+  // });
+  // return data;
+  // console.log("before sending the return ",data)
+  let usernameQuery = "SELECT * FROM login";
+  db.query(usernameQuery, (err, result) => {
+    if (err) {
+      throw err;
+    }
+    console.log(result,new Date().getTime());
+    return result;
+  });
 }
 
-
-
-
+exports.test=function(req,res){
+  return res.send({userName:"Geeth",password:"123"});
+}
 

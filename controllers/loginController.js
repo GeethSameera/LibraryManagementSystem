@@ -53,7 +53,7 @@ exports.login = function (req, res) {
   // console.log(req.originalUrl)
   // return res.status(200).json(req.originalUrl);
 
-  let usernameQuery = "SELECT * FROM login WHERE userName='" + req.body.userName + "'AND password='" + req.body.password + "' ";
+  let usernameQuery = "SELECT * FROM login WHERE Username='" + req.body.userName + "'AND Password='" + req.body.password + "' ";
   db.query(usernameQuery, (err, result) => {
     console.log(result)
     if (err) //throw err;
@@ -64,8 +64,8 @@ exports.login = function (req, res) {
         console.log(result[0].userName);
         return res.status(200).json({
           response: {
-            userName: result[0].userName,
-            password: result[0].password
+            userName: result[0].Username,
+            password: result[0].Password
           },
           message: "Logged in Successfully",
           isSuccess: true

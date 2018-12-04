@@ -31,7 +31,7 @@ router.use(function (req, res, next) {
 });
 
 router.get('/viewDetails',memberController.viewInfo);
-router.post('/register',memberController.registerMember);
+// router.post('/register',memberController.registerMember);
 // router.post('/jobimage/:imageid',JobController.uploadImage);
 
 module.exports = router;

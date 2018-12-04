@@ -49,34 +49,28 @@ app.use(router);
 
 /* ### view_member ## */
 exports.viewInfo = function (req, res) {
-  let usernameQuery = "SELECT * FROM login WHERE userName='" + req.query.userName+"' ";
+  let usernameQuery = "SELECT * FROM member m,guarantor g WHERE Member_ID='" + req.query.id + "' AND g.Guarantor_ID=4";
   db.query(usernameQuery, (err, result) => {
-    console.log(req.query.userName)
+    // console.log(req.query.userName)
     if (err) //throw err;
-      return res.status(500).json({ message:result });
+      return res.status(500).json({ message: result });
     // console.log(result,new Date().getTime());
     else {
       if (result[0]) {
-        console.log(result[0].userName);
+        // console.log(result[0].userName);
         return res.status(200).json({
-            message:result
-        //   response: {
-        //     userName: result[0].userName,
-        //     password: result[0].password
-        //   },
-        //   message: "Logged in Successfully",
-        //   isSuccess: true
+          // message:result[0]
+          memberDetails: result[0],
+          message: "Data Received",
+          isSuccess: true
         });
       }
       else {
         return res.status(200).json({
-            message:result
-        //   response: {
-        //     userName: "",
-        //     password: ""
-        //   },
-        //   message: "Login Failed.Check Your Credentials And Retry",
-        //   isSuccess: false
+          // message:result
+          memberDetails: "Empty",
+          message: "No data found",
+          isSuccess: false
         });
       }
     }
@@ -85,36 +79,36 @@ exports.viewInfo = function (req, res) {
 
 /* ### Register_member ## */
 exports.registerMember = function (req, res) {
-    let usernameQuery = "INSERT INTO login VALUES('"+req.body.userName+"','"+req.body.password+"') ";
-    db.query(usernameQuery, (err, result) => {
-      console.log(req.query.userName)
-      if (err) //throw err;
-        return res.status(500).json({ message:result });
-      // console.log(result,new Date().getTime());
-      else {
-        // if (result[0]) {
-        //   console.log(result[0].userName);
-          return res.status(200).json({
-              message:"Member Registered Successfully"
-          //   response: {
-          //     userName: result[0].userName,
-          //     password: result[0].password
-          //   },
-          //   message: "Logged in Successfully",
-          //   isSuccess: true
-          });
-        // }
-        // else {
-        //   return res.status(200).json({
-        //       message:result
-        //   //   response: {
-        //   //     userName: "",
-        //   //     password: ""
-        //   //   },
-        //   //   message: "Login Failed.Check Your Credentials And Retry",
-        //   //   isSuccess: false
-        //   });
-        // }
-      }
-    });
-  }
+  let usernameQuery = "INSERT INTO login VALUES('" + req.body.userName + "','" + req.body.password + "') ";
+  db.query(usernameQuery, (err, result) => {
+    console.log(req.query.userName)
+    if (err) //throw err;
+      return res.status(500).json({ message: result });
+    // console.log(result,new Date().getTime());
+    else {
+      // if (result[0]) {
+      //   console.log(result[0].userName);
+      return res.status(200).json({
+        message: "Member Registered Successfully"
+        //   response: {
+        //     userName: result[0].userName,
+        //     password: result[0].password
+        //   },
+        //   message: "Logged in Successfully",
+        //   isSuccess: true
+      });
+      // }
+      // else {
+      //   return res.status(200).json({
+      //       message:result
+      //   //   response: {
+      //   //     userName: "",
+      //   //     password: ""
+      //   //   },
+      //   //   message: "Login Failed.Check Your Credentials And Retry",
+      //   //   isSuccess: false
+      //   });
+      // }
+    }
+  });
+}

@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 const port = 3000
 var loginRouter = require('./routes/login');
 var memberRouter = require('./routes/member');
+var bookRouter = require('./routes/book');
 
 //sql
 const con = mysql.createConnection({
@@ -34,6 +35,7 @@ app.use(bodyParser.json());
 // app.use('/member', memberRouter);
 app.use('/', loginRouter);
 app.use('/member/',memberRouter);
+app.use('/book/',bookRouter);
 
 app.listen(port, (err) => {
   if (err) {

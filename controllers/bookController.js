@@ -44,16 +44,23 @@ app.use(router);
 /* ### view_member ## */
 exports.viewBookInfo = function (req, res) {
   let memberInsertionQuery = "\
-                      SELECT *\
-                      FROM book\
-                      WHERE Book_ID='" + req.query.id + "' OR ISBN='" + req.query.id + "'  ";
+                      SELECT\
+                      b.Book_ID,\
+                      b.ISBN,\
+                      b.Book_Name,\
+                      a.Name,\
+                      b.No_of_copies,\
+                      b.Edition,\
+                      b.No_of_copies\
+                      FROM book b,book_author ba,author a\
+                      WHERE b.Book_ID=ba.Book_ID AND ba.Author_ID=a.Author_ID AND b.Book_ID='" + req.query.id + "' OR b.ISBN='" + req.query.id + "' OR a.Author_ID='" + req.query.id + "'  ";
   db.query(memberInsertionQuery, (err, result) => {
     if (err) 
       return res.status(500).json({ message: result });
     else {
       if (result[0]) {
         return res.status(200).json({
-          memberDetails: result[0],
+          bookDetails: result,
           message: "Data Received",
           isSuccess: true
         });
@@ -69,148 +76,3 @@ exports.viewBookInfo = function (req, res) {
     }
   });
 }
-
-/* ### Register_member ## */
-// exports.registerMember = function (req, res) {
-//   console.log(req.body);
-//   // console.log(addMemberQuery);
-//   let addGuarantorQuery = "\
-//                           INSERT INTO guarantor\
-//                          (G_Title, G_Name, G_NIC, G_Workplace, G_Postal_Code, G_Street, G_City, G_Occupation, G_Mobile)\
-//                           VALUES(\
-//                           '" + req.body.guarantor.g_title + "',\
-//                           '" + req.body.guarantor.g_firstName + "',\
-//                           '" + req.body.guarantor.g_nic + "',\
-//                           '" + req.body.guarantor.g_workplace + "',\
-//                           '" + req.body.guarantor.g_postalCode + "',\
-//                           '" + req.body.guarantor.g_street + "',\
-//                           '" + req.body.guarantor.g_city + "',\
-//                           '" + req.body.guarantor.g_occupation + "',\
-//                           '" + req.body.guarantor.g_mobile + "'\
-//                         )";
-//   db.query(addGuarantorQuery, (err, result) => {
-//     // console.log(req.query.userName)
-//     if (err)
-//       return res.status(500).json({ message: "Registration Failed" });
-//     else {
-//       if (result.affectedRows > 0) {
-//         let addMemberQuery = "\
-//         INSERT INTO member\
-//         (Title, FName, LName, Gender, DOB, Registration_Date, NIC, Member_Type, Mobile, Email, Expire_Date, Guarantor_ID)\
-//         VALUES(\
-//           '" + req.body.member.m_title + "',\
-//           '" + req.body.member.m_firstName + "',\
-//           '" + req.body.member.m_lastName + "',\
-//           '" + req.body.member.m_gender + "',\
-//           '" + req.body.member.m_dob + "',\
-//           '" + req.body.member.m_expiryDate + "',\
-//           '" + req.body.member.m_nic + "',\
-//           '" + req.body.member.m_memberType + "',\
-//           '" + req.body.member.m_mobile + "',\
-//           '" + req.body.member.m_email + "',\
-//           '" + req.body.member.m_expiryDate + "',\
-//           '"+ result.insertId + "'\
-//         )";
-//         db.query(addMemberQuery, (err, result_m) => {
-//           if (err)
-//             return res.status(500).json({ message: "Registration Failed" });
-//           else {
-//             let memberAddressQuery = "\
-//             INSERT INTO member_address\
-//             VALUES(\
-//               '" + result_m.insertId + "',\
-//               '" + req.body.member.m_postalCode + "',\
-//               '" + req.body.member.m_street + "',\
-//               '" + req.body.member.m_city + "'\
-//             )";
-//             db.query(memberAddressQuery, (err, result) => {
-//               if (err)
-//                 return res.status(500).json({ message: "Registration Failed" });
-//               else {
-//                 if (result.affectedRows > 0) {
-//                   return res.status(200).json({
-//                     response: "Member Registered Successfully",
-//                     message: "Member Registered Successfully",
-//                     isSuccess: true
-//                   });
-//                 }
-//               }
-//             });
-//           }
-//         });
-
-//       }
-//       else {
-//         return res.status(200).json({
-//           response: "Registration Failed",
-//           message: "Registration Failed",
-//           isSuccess: false
-//         });
-//       }
-//     }
-//   });
-// }
-
-/* ### update_member ## */
-// exports.updateMember = function (req, res) {
-//   let updateMemberQuery = "\
-//                       UPDATE member\
-//                       SET\
-//                       Title='" + req.body.Title + "',\
-//                       FName='" + req.body.FName + "',\
-//                       LName='" + req.body.LName + "',\
-//                       Gender='" + req.body.Gender + "',\
-//                       DOB='" + req.body.DOB + "',\
-//                       Registration_Date='" + req.body.Expire_Date + "',\
-//                       NIC='" + req.body.NIC + "',\
-//                       Member_Type='" + req.body.Member_Type + "',\
-//                       Mobile='" + req.body.Mobile + "',\
-//                       Email='" + req.body.Email + "',\
-//                       Expire_Date='" + req.body.Expire_Date + "',\
-//                       Guarantor_ID='" + req.body.Guarantor_ID + "'\
-//                       WHERE Member_ID='"+ req.body.Member_ID + "' ";
-//   let updateGuaranterQuery = "UPDATE guarantor\
-//                      SET\
-//                       G_Title='" + req.body.G_Title + "',\
-//                       G_Name='" + req.body.G_Name + "',\
-//                       G_NIC='" + req.body.G_NIC + "',\
-//                       G_Workplace='" + req.body.G_Workplace + "',\
-//                       G_Postal_Code='" + req.body.G_Postal_Code + "',\
-//                       G_Street='" + req.body.G_Street + "',\
-//                       G_City='" + req.body.G_City + "',\
-//                       G_Occupation='" + req.body.G_Occupation + "',\
-//                       G_Mobile='" + req.body.G_Mobile + "'\
-//                       WHERE Guarantor_ID='"+ req.body.Guarantor_ID + "' ";
-//   db.query(updateMemberQuery, (err, result) => {
-//     if (err) 
-//       return res.status(500).json({ message: "Member Update Failed" });
-//     else {
-//       if (result.affectedRows > 0) {
-//         db.query(updateGuaranterQuery, (err, result) => {
-//           if (err) 
-//             return res.status(500).json({ message: err });
-//           else {
-//             if (result.affectedRows > 0) {
-//               return res.status(200).json({
-//                 message: result.affectedRows + " " + "Record/s Updated",
-//                 isSuccess: true
-//               });
-//             }
-//             else{
-//               return res.status(200).json({
-//                 message: "Member Update Failed",
-//                 isSuccess: false
-//               });
-//             }
-//           }
-//         });
-//       }
-//       else {
-//         return res.status(200).json({
-//           message: "Member Update Failed",
-//           isSuccess: false
-//         });
-//       }
-//     }
-//   });
-// }

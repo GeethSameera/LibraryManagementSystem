@@ -53,7 +53,7 @@ exports.viewBookInfo = function (req, res) {
                       b.Edition,\
                       b.No_of_copies\
                       FROM book b,book_author ba,author a\
-                      WHERE b.Book_ID=ba.Book_ID AND ba.Author_ID=a.Author_ID AND b.Book_ID='" + req.query.id + "' OR b.ISBN='" + req.query.id + "' OR a.Author_ID='" + req.query.id + "'  ";
+                      WHERE b.Book_ID=ba.Book_ID AND ba.Author_ID=a.Author_ID AND b.Book_Name like '%" + req.query.id + "%' OR b.ISBN='" + req.query.id + "' OR a.Name like'%" + req.query.id + "%'  ";
   db.query(memberInsertionQuery, (err, result) => {
     if (err) 
       return res.status(500).json({ message: result });

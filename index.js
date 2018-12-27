@@ -7,7 +7,8 @@ const port = 3000
 var loginRouter = require('./routes/login');
 var memberRouter = require('./routes/member');
 var bookRouter = require('./routes/book');
-
+var supplierRouter = require('./routes/supplier');
+var donatorRouter = require('./routes/donator');
 //sql
 const con = mysql.createConnection({
   host: "localhost",
@@ -36,6 +37,8 @@ app.use(bodyParser.json());
 app.use('/', loginRouter);
 app.use('/member/',memberRouter);
 app.use('/book/',bookRouter);
+app.use('/supplier/',supplierRouter);
+app.use('/donator/',donatorRouter);
 
 app.listen(port, (err) => {
   if (err) {

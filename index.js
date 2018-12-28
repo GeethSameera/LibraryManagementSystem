@@ -33,7 +33,6 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
-// app.use('/member', memberRouter);
 app.use('/', loginRouter);
 app.use('/member/',memberRouter);
 app.use('/book/',bookRouter);

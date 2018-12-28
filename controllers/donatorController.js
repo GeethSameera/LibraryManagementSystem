@@ -5,10 +5,6 @@ var router = express.Router();
 var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors')
-var Promise = require('promise');
-
-var util = require('util');
-
 
 app.use(cors())
 router.use(cors())
@@ -73,27 +69,26 @@ exports.viewInfo = function (req, res) {
 /* ### Register_donator ## */
 exports.registerDonator = function (req, res) {
   console.log(req.body);
-  let addSupplierQuery = "\
-                          INSERT INTO supplier\
-                         (First_Name, Address, Email, Mobile, Designation, Company, Title, Last_Name)\
+  let addDonatorQuery = "\
+                          INSERT INTO donator\
+                         (First_Name, Address, Email, Mobile, Last_Name, NIC, Title)\
                           VALUES(\
-                          '" + req.body.supplier.s_fname + "',\
-                          '" + req.body.supplier.s_address + "',\
-                          '" + req.body.supplier.s_email + "',\
-                          '" + req.body.supplier.s_mobile + "',\
-                          '" + req.body.supplier.s_designation + "',\
-                          '" + req.body.supplier.s_company + "',\
-                          '" + req.body.supplier.s_title + "',\
-                          '" + req.body.supplier.s_lname + "'\
+                          '" + req.body.supplier.d_fname + "',\
+                          '" + req.body.supplier.d_address + "',\
+                          '" + req.body.supplier.d_email + "',\
+                          '" + req.body.supplier.d_mobile + "',\
+                          '" + req.body.supplier.d_lname + "',\
+                          '" + req.body.supplier.d_nic + "',\
+                          '" + req.body.supplier.d_title + "'\
                         )";
-  db.query(addSupplierQuery, (err, result) => {
+  db.query(addDonatorQuery, (err, result) => {
     if (err)
       return res.status(500).json({ message: "Registration Failed" });
     else {
       if (result.affectedRows > 0) {
         return res.status(200).json({
-          response: "Supplier Registered Successfully",
-          message: "Supplier Registered Successfully",
+          response: "Donator Registered Successfully",
+          message: "Donator Registered Successfully",
           isSuccess: true
         });
 
@@ -104,20 +99,19 @@ exports.registerDonator = function (req, res) {
 
 /* ### update_donator ## */
 exports.updateDonator = function (req, res) {
-  let updateSupplierQuery = "UPDATE supplier\
+  let updateDonatorQuery = "UPDATE donator\
                      SET\
                       First_Name='" + req.body.First_Name + "',\
                       Address='" + req.body.Address + "',\
                       Email='" + req.body.Email + "',\
                       Mobile='" + req.body.Mobile + "',\
-                      Designation='" + req.body.Designation + "',\
-                      Company='" + req.body.Company + "',\
                       Title='" + req.body.Title + "',\
+                      NIC='" + req.body.NIC + "',\
                       Last_Name='" + req.body.Last_Name + "'\
-                      WHERE Supplier_ID='"+ req.body.Supplier_ID + "' ";
-  db.query(updateSupplierQuery, (err, result) => {
+                      WHERE Donor_ID='"+ req.body.Donor_ID + "' ";
+  db.query(updateDonatorQuery, (err, result) => {
     if (err)
-      return res.status(500).json({ message: err });
+      return res.status(500).json({ message: "Update Failed" });
     else {
       if (result.affectedRows > 0) {
         return res.status(200).json({

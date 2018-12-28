@@ -6,6 +6,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var donatorController  = require('../controllers/donatorController');
+var emailController = require ('../controllers/emailController');
 
 app.use(cors())
 router.use(cors())
@@ -32,6 +33,7 @@ router.use(function (req, res, next) {
 router.get('/viewDetails',donatorController.viewInfo);
 router.post('/register',donatorController.registerDonator);
 router.put('/update',donatorController.updateDonator);
+router.post('/sendletter',emailController.sendEmail);
 
 module.exports = router;
 

@@ -83,7 +83,10 @@ exports.registerDonator = function (req, res) {
                         )";
   db.query(addDonatorQuery, (err, result) => {
     if (err)
-      return res.status(500).json({ message: "Registration Failed" });
+      return res.status(200).json({
+         message: err,
+         isSuccess: false
+        });
     else {
       if (result.affectedRows > 0) {
         return res.status(200).json({
@@ -111,12 +114,42 @@ exports.updateDonator = function (req, res) {
                       WHERE Donor_ID='"+ req.body.Donor_ID + "' ";
   db.query(updateDonatorQuery, (err, result) => {
     if (err)
-      return res.status(500).json({ message: "Update Failed" });
+      return res.status(200).json({ 
+        message: "Update Failed",
+        isSuccess: false
+      });
     else {
       if (result.affectedRows > 0) {
         return res.status(200).json({
           message: result.affectedRows + " " + "Record/s Updated",
           isSuccess: true
+        });
+      }
+    }
+  });
+}
+
+/* ### get_NIC_list ## */
+exports.getIDList = function (req, res) {
+  let nicSearchQuery = "\
+                      SELECT NIC\
+                      FROM donator ";
+  db.query(nicSearchQuery, (err, result) => {
+    if (err)
+      return res.status(500).json({ message: err });
+    else {
+      if (result[0]) {
+        return res.status(200).json({
+          nicList: result,
+          message: "Data Received",
+          isSuccess: true
+        });
+      }
+      else {
+        return res.status(200).json({
+          memberDetails: "Empty",
+          message: "No data found",
+          isSuccess: false
         });
       }
     }

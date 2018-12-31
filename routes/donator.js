@@ -34,6 +34,7 @@ router.get('/viewDetails',donatorController.viewInfo);
 router.post('/register',donatorController.registerDonator);
 router.put('/update',donatorController.updateDonator);
 router.post('/sendletter',emailController.sendEmail);
+router.get('/getNICList',donatorController.getIDList);
 
 module.exports = router;
 

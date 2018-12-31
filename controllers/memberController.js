@@ -96,7 +96,10 @@ exports.registerMember = function (req, res) {
   db.query(addGuarantorQuery, (err, result) => {
     // console.log(req.query.userName)
     if (err)
-      return res.status(500).json({ message: "Registration Failed" });
+      return res.status(200).json({ 
+        message: "Registration Failed",
+        isSuccess: false
+      });
     else {
       if (result.affectedRows > 0) {
         let addMemberQuery = "\
@@ -118,7 +121,10 @@ exports.registerMember = function (req, res) {
         )";
         db.query(addMemberQuery, (err, result_m) => {
           if (err)
-            return res.status(500).json({ message: "Registration Failed" });
+            return res.status(200).json({
+               message: "Registration Failed",
+               isSuccess: false
+               });
           else {
             let memberAddressQuery = "\
             INSERT INTO member_address\
@@ -130,7 +136,10 @@ exports.registerMember = function (req, res) {
             )";
             db.query(memberAddressQuery, (err, result) => {
               if (err)
-                return res.status(500).json({ message: "Registration Failed" });
+                return res.status(200).json({
+                   message: "Registration Failed",
+                   isSuccess: false
+               });
               else {
                 if (result.affectedRows > 0) {
                   return res.status(200).json({

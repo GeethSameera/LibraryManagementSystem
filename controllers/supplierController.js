@@ -88,7 +88,10 @@ exports.registerSupplier = function (req, res) {
                         )";
   db.query(addSupplierQuery, (err, result) => {
     if (err)
-      return res.status(500).json({ message: "Registration Failed" });
+      return res.status(200).json({
+         message: "Registration Failed",
+         isSuccess: false
+        });
     else {
       if (result.affectedRows > 0) {
         return res.status(200).json({
@@ -117,7 +120,10 @@ exports.updateSupplier = function (req, res) {
                       WHERE Supplier_ID='"+ req.body.Supplier_ID + "' ";
   db.query(updateSupplierQuery, (err, result) => {
     if (err)
-      return res.status(500).json({ message: err });
+      return res.status(200).json({ 
+        message: err,
+        isSuccess: false
+      });
     else {
       if (result.affectedRows > 0) {
         return res.status(200).json({

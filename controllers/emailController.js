@@ -36,27 +36,34 @@ router.use(function (req, res, next) {
 
 app.use(router);
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
+let transporter = nodemailer.createTransport({
+  host: 'mail.yahoo.com',
+  port: 587,
+  secure: false, // true for 465, false for other ports
   auth: {
-    user: 'youremail@gmail.com',
-    pass: 'yourpassword'
+      user: 'pannalalibrary@yahoo.com', // generated ethereal user
+      pass: '12345#asd' // generated ethereal password
+  },
+  tls:{
+    rejectUnauthorized:false
   }
 });
 
-var mailOptions = {
-  from: 'youremail@gmail.com',
-  to: 'myfriend@yahoo.com',
-  subject: 'Sending Email using Node.js',
-  text: 'That was easy!'
+// setup email data with unicode symbols
+let mailOptions = {
+  from: '"Geeth" <pannalalibrary@yahoo.com>', // sender address
+  to: 'geethsameera077@gmail.com', // list of receivers
+  subject: 'Hello ✔', // Subject line
+  text: 'Hello world?', // plain text body
+  html: '<b>Hello world?</b>' // html body
 };
 
-exports.sendEmail=function (req,res){
-    transporter.sendMail(mailOptions, function(error, info){
-        if (error) {
-          console.log(error);
-        } else {
-          console.log('Email sent: ' + info.response);
-        }
-      });
+exports.sendEmail = function (req, res) {
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log("Error"+error);
+    }
+    console.log('Message sent');
+    console.log('Preview URL');
+  });
 }

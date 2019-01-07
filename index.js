@@ -11,6 +11,7 @@ var supplierRouter = require('./routes/supplier');
 var donatorRouter = require('./routes/donator');
 var emailRouter = require('./routes/email');
 
+var authorRouter = require('./routes/author');
 //sql
 const con = mysql.createConnection({
   host: "localhost",
@@ -41,6 +42,7 @@ app.use('/book/',bookRouter);
 app.use('/supplier/',supplierRouter);
 app.use('/donator/',donatorRouter);
 app.use('/email/',emailRouter);
+app.use('/author/',authorRouter);
 
 app.listen(port, (err) => {
   if (err) {

@@ -147,7 +147,34 @@ exports.getIDList = function (req, res) {
       }
       else {
         return res.status(200).json({
-          memberDetails: "Empty",
+          nicList: "Empty",
+          message: "No data found",
+          isSuccess: false
+        });
+      }
+    }
+  });
+}
+
+/* ### get_AuthorList ## */
+exports.getAuthorList= function (req, res) {
+  let authorSearchQuery = "\
+                      SELECT Name\
+                      FROM author ";
+  db.query(authorSearchQuery, (err, result) => {
+    if (err)
+      return res.status(500).json({ message: err });
+    else {
+      if (result[0]) {
+        return res.status(200).json({
+          authorList: result,
+          message: "Data Received",
+          isSuccess: true
+        });
+      }
+      else {
+        return res.status(200).json({
+          authorList: "Empty",
           message: "No data found",
           isSuccess: false
         });

@@ -5,8 +5,7 @@ var router = express.Router();
 var app = express();
 var bodyParser = require('body-parser');
 var cors = require('cors');
-var donatorController  = require('../controllers/donatorController');
-var emailController = require ('../controllers/emailController');
+var authorController  = require('../controllers/authorController');
 
 app.use(cors())
 router.use(cors())
@@ -30,12 +29,8 @@ router.use(function (req, res, next) {
   next();
 });
 
-router.get('/viewDetails',donatorController.viewInfo);
-router.post('/register',donatorController.registerDonator);
-router.put('/update',donatorController.updateDonator);
-router.post('/sendletter',emailController.sendEmail);
-router.get('/getNICList',donatorController.getIDList);
-router.get('/getauthorlist',donatorController.getAuthorList)
+router.get('/getauthorlist',authorController.getAuthorList);
+router.post('/addauthor',authorController.addAuthor)
 
 module.exports = router;
 

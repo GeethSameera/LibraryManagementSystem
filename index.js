@@ -9,6 +9,8 @@ var memberRouter = require('./routes/member');
 var bookRouter = require('./routes/book');
 var supplierRouter = require('./routes/supplier');
 var donatorRouter = require('./routes/donator');
+var emailRouter = require('./routes/email');
+
 var authorRouter = require('./routes/author');
 var publisherRouter = require('./routes/publisher');
 //sql
@@ -40,6 +42,7 @@ app.use('/member/',memberRouter);
 app.use('/book/',bookRouter);
 app.use('/supplier/',supplierRouter);
 app.use('/donator/',donatorRouter);
+app.use('/email/',emailRouter);
 app.use('/author/',authorRouter);
 app.use('/publisher/',publisherRouter);
 

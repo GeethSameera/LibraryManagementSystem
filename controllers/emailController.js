@@ -1,4 +1,5 @@
-var nodemailer = require('nodemailer');
+'use strict';
+const nodemailer = require('nodemailer');
 var express = require('express');
 var router = express.Router();
 var app = express();
@@ -36,34 +37,56 @@ router.use(function (req, res, next) {
 
 app.use(router);
 
-let transporter = nodemailer.createTransport({
-  host: 'mail.yahoo.com',
-  port: 587,
-  secure: false, // true for 465, false for other ports
-  auth: {
-      user: 'pannalalibrary@yahoo.com', // generated ethereal user
-      pass: '12345#asd' // generated ethereal password
-  },
-  tls:{
-    rejectUnauthorized:false
-  }
-});
-
-// setup email data with unicode symbols
-let mailOptions = {
-  from: '"Geeth" <pannalalibrary@yahoo.com>', // sender address
-  to: 'geethsameera077@gmail.com', // list of receivers
-  subject: 'Hello ✔', // Subject line
-  text: 'Hello world?', // plain text body
-  html: '<b>Hello world?</b>' // html body
-};
-
 exports.sendEmail = function (req, res) {
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      return console.log("Error"+error);
-    }
-    console.log('Message sent');
-    console.log('Preview URL');
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+      host: 'smtp.mail.yahoo.com',
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+          user: 'pannalalibrary@yahoo.com', // generated ethereal user
+          pass: '12345#asd' // generated ethereal password
+      },
+      tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false
+    },
+    logger: true,
+    debug: true
+      
   });
+
+  // setup email data with unicode symbols
+  let mailOptions = {
+      from: '"Pannala Public Libaray" <pannalalibrary@yahoo.com>', // sender address
+      to: 'geethsameera077@gmail.com', // list of receivers
+      subject: 'Thanking For The Donations', // Subject line
+      text: 'Hello world', // plain text body
+      // html: '<b>Hello world?</b>' // html body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return res.status(200).json({
+          emailStatus: "Failed",
+          message: "Sending UnSuccessful",
+          isSuccess: false
+        });
+      }
+      else{
+        return res.status(200).json({
+          emailStatus: "Success",
+          message: "Sending Successful",
+          isSuccess: true
+        });
+      }
+      // console.log('Message sent: %s', info.messageId);
+      // Preview only available when sending through an Ethereal account
+      // console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+      // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+      // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  });
+
 }

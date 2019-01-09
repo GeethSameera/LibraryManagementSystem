@@ -53,9 +53,9 @@ exports.viewBookInfo = function (req, res) {
                       b.Edition,\
                       b.No_of_copies\
                       FROM book b,book_author ba,author a\
-                      WHERE b.Book_ID=ba.Book_ID AND ba.Author_ID=a.Author_ID AND (b.Book_Name LIKE '%"+req.query.id+"%' OR b.ISBN='"+req.query.id+"' OR a.Name LIKE '%"+req.query.id+"%') ";
+                      WHERE b.Book_ID=ba.Book_ID AND ba.Author_ID=a.Author_ID AND (b.Book_Name LIKE '%"+ req.query.id + "%' OR b.ISBN='" + req.query.id + "' OR a.Name LIKE '%" + req.query.id + "%') ";
   db.query(memberInsertionQuery, (err, result) => {
-    if (err) 
+    if (err)
       return res.status(500).json({ message: result });
     else {
       if (result[0]) {
@@ -69,6 +69,62 @@ exports.viewBookInfo = function (req, res) {
         return res.status(200).json({
           // message:result
           memberDetails: "Empty",
+          message: "No data found",
+          isSuccess: false
+        });
+      }
+    }
+  });
+}
+
+/* ### Register_category ## */
+exports.addCategory = function (req, res) {
+  console.log(req.body);
+  let addCategoryQuery = "\
+                          INSERT INTO book_category\
+                         (Name)\
+                          VALUES(\
+                          '" + req.body.category.name + "'\
+                        )";
+  db.query(addCategoryQuery, (err, result) => {
+    if (err)
+      return res.status(200).json({
+         message: err,
+         isSuccess: false
+        });
+    else {
+      if (result.affectedRows > 0) {
+        return res.status(200).json({
+          response: "Category Added Successfully",
+          message: "Category Added Successfully",
+          isSuccess: true
+        });
+
+      }
+    }
+  });
+}
+
+
+/* ### get_BookCategoryList ## */
+exports.getBookCategoryList= function (req, res) {
+  let bookCategorySearchQuery = "\
+                      SELECT Category_ID,Name\
+                      FROM book_category ";
+  db.query(bookCategorySearchQuery, (err, result) => {
+    if (err)
+      return res.status(500).json({ message: err });
+    else {
+      if (result[0]) {
+        return res.status(200).json({
+          categoryList: result,
+          message: "Data Received",
+          isSuccess: true
+        });
+      }
+      else {
+        return res.status(200).json({
+          categoryList: "Empty",
           message: "No data found",
           isSuccess: false
         });

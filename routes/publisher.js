@@ -4,8 +4,8 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var bodyParser = require('body-parser');
-var cors = require('cors')
-var bookController  = require('../controllers/bookController');
+var cors = require('cors');
+var publisherController  = require('../controllers/publisherController');
 
 app.use(cors())
 router.use(cors())
@@ -29,11 +29,8 @@ router.use(function (req, res, next) {
   next();
 });
 
-router.get('/viewDetails',bookController.viewBookInfo);
-// router.post('/register',memberController.registerMember);
-// router.put('/update',memberController.updateMember);
-router.get('/getcategorylist',bookController.getBookCategoryList);
-router.post('/addcategory',bookController.addCategory);
+router.get('/getpublisherlist',publisherController.getPublisherList);
+router.post('/addpublisher',publisherController.addPublisher);
 
 module.exports = router;
 

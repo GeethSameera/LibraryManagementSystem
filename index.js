@@ -10,6 +10,7 @@ var bookRouter = require('./routes/book');
 var supplierRouter = require('./routes/supplier');
 var donatorRouter = require('./routes/donator');
 var authorRouter = require('./routes/author');
+var publisherRouter = require('./routes/publisher');
 //sql
 const con = mysql.createConnection({
   host: "localhost",
@@ -40,6 +41,7 @@ app.use('/book/',bookRouter);
 app.use('/supplier/',supplierRouter);
 app.use('/donator/',donatorRouter);
 app.use('/author/',authorRouter);
+app.use('/publisher/',publisherRouter);
 
 app.listen(port, (err) => {
   if (err) {

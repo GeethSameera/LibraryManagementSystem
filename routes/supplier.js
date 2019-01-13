@@ -32,6 +32,7 @@ router.use(function (req, res, next) {
 router.get('/viewDetails',supplierController.viewInfo);
 router.post('/register',supplierController.registerSupplier);
 router.put('/update',supplierController.updateSupplier);
+router.get('/getsupplierlist',supplierController.getSupplierList);
 
 module.exports = router;
 

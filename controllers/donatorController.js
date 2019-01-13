@@ -156,25 +156,25 @@ exports.getIDList = function (req, res) {
   });
 }
 
-/* ### get_AuthorList ## */
-exports.getAuthorList= function (req, res) {
-  let authorSearchQuery = "\
-                      SELECT Name\
-                      FROM author ";
-  db.query(authorSearchQuery, (err, result) => {
+/* ### get_DonatorList ## */
+exports.getDonatorList= function (req, res) {
+  let donatorSearchQuery = "\
+                      SELECT Donor_ID,First_Name\
+                      FROM donator ";
+  db.query(donatorSearchQuery, (err, result) => {
     if (err)
       return res.status(500).json({ message: err });
     else {
       if (result[0]) {
         return res.status(200).json({
-          authorList: result,
+          donatorList: result,
           message: "Data Received",
           isSuccess: true
         });
       }
       else {
         return res.status(200).json({
-          authorList: "Empty",
+          donatorList: "Empty",
           message: "No data found",
           isSuccess: false
         });

@@ -30,10 +30,17 @@ router.use(function (req, res, next) {
 });
 
 router.get('/viewDetails',bookController.viewBookInfo);
-// router.post('/register',memberController.registerMember);
-// router.put('/update',memberController.updateMember);
+router.post('/addbooks',bookController.addbook);
+router.put('/update',bookController.updateBooks);
 router.get('/getcategorylist',bookController.getBookCategoryList);
 router.post('/addcategory',bookController.addCategory);
+router.get('/viewhistory',bookController.getHistory);
+router.post('/issuebooks',bookController.burrowBooks);
+router.get('/increment',bookController.incrementBooks);
+router.get('/decrement',bookController.decrementBooks);
+router.get('/updatestatus',bookController.updateStatus);
+router.post('/reservebooks',bookController.reserveBooks);
+router.post('/pay',bookController.pay);
 
 module.exports = router;
 

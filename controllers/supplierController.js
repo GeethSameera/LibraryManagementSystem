@@ -134,3 +134,30 @@ exports.updateSupplier = function (req, res) {
     }
   });
 }
+
+/* ### get_SuppplierList ## */
+exports.getSupplierList= function (req, res) {
+  let supplierSearchQuery = "\
+                      SELECT Supplier_ID,First_Name\
+                      FROM supplier ";
+  db.query(supplierSearchQuery, (err, result) => {
+    if (err)
+      return res.status(500).json({ message: err });
+    else {
+      if (result[0]) {
+        return res.status(200).json({
+          supplierList: result,
+          message: "Data Received",
+          isSuccess: true
+        });
+      }
+      else {
+        return res.status(200).json({
+          supplierList: "Empty",
+          message: "No data found",
+          isSuccess: false
+        });
+      }
+    }
+  });
+}

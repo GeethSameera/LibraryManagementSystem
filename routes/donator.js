@@ -35,7 +35,8 @@ router.post('/register',donatorController.registerDonator);
 router.put('/update',donatorController.updateDonator);
 router.post('/sendletter',emailController.sendEmail);
 router.get('/getNICList',donatorController.getIDList);
-router.get('/getauthorlist',donatorController.getAuthorList)
+router.get('/getdonatorlist',donatorController.getDonatorList);
+
 
 module.exports = router;
 

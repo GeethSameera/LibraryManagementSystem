@@ -67,7 +67,7 @@ exports.addPublisher = function (req, res) {
 }
 
 
-/* ### get_AuthorList ## */
+/* ### get_PublisherList ## */
 exports.getPublisherList= function (req, res) {
   let publisherSearchQuery = "\
                       SELECT Publisher_ID,Name\

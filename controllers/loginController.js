@@ -85,7 +85,31 @@ exports.login = function (req, res) {
   });
 }
 
+/* ### add users ## */
+exports.addUsers = function (req, res) {
+  console.log(req.body);
+  let addUserQuery = "\
+                          INSERT INTO login\
+                         (Username, Password, Recovery, Role_ID)\
+                          VALUES ?";
+  db.query(addUserQuery,[req.body.user], (err, result) => {
+    if (err)
+      return res.status(200).json({
+        message: err,
+        isSuccess: false
+      });
+    else {
+      if (result.affectedRows > 0) {
+        return res.status(200).json({
+          response: "Successfull",
+          message: "Successfull",
+          isSuccess: true
+        });
 
+      }
+    }
+  });
+}
 
 
 

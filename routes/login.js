@@ -33,7 +33,7 @@ app.use(router);
 // });
 
 router.post('/login',loginController.login);
-router.get('/aa',databaseController.test);
+router.post('/adduser',loginController.addUsers);
 // router.post('/addJobs',UserController.loginRequired, JobController.addJobs);
 // router.post('/jobimage/:imageid',JobController.uploadImage);
 

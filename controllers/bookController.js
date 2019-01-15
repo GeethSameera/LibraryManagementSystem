@@ -48,8 +48,8 @@ exports.viewBookInfo = function (req, res) {
                       b.Book_ID,\
                       b.ISBN,\
                       b.Book_Name,\
-                      a.Author_ID,\
-                      a.Name,\
+                      GROUP_CONCAT(DISTINCT a.Author_ID) as Author_ID,\
+                      GROUP_CONCAT(DISTINCT a.Name SEPARATOR ', ') as Name,\
                       b.No_of_copies,\
                       b.Edition,\
                       b.No_of_copies,\
@@ -62,7 +62,7 @@ exports.viewBookInfo = function (req, res) {
                       b.Supplier_ID,\
                       b.Available_copies\
                       FROM book b,book_author ba,author a\
-                      WHERE b.Book_ID=ba.Book_ID AND ba.Author_ID=a.Author_ID AND (b.Book_Name LIKE '%"+ req.query.id + "%' OR b.ISBN='" + req.query.id + "' OR a.Name LIKE '%" + req.query.id + "%' OR b.Book_ID='" + req.query.id + "') ";
+                      WHERE b.Book_ID=ba.Book_ID AND ba.Author_ID=a.Author_ID AND (b.Book_Name LIKE '%"+ req.query.id + "%' OR b.ISBN='" + req.query.id + "' OR a.Name LIKE '%" + req.query.id + "%' OR b.Book_ID='" + req.query.id + "') GROUP BY b.Book_ID ";
   db.query(memberInsertionQuery, (err, result) => {
     if (err)
       return res.status(500).json({ message: result });
@@ -98,7 +98,7 @@ exports.addCategory = function (req, res) {
   db.query(addCategoryQuery, (err, result) => {
     if (err)
       return res.status(200).json({
-        message: err,
+        message: "Failed",
         isSuccess: false
       });
     else {
@@ -231,12 +231,12 @@ exports.updateBooks = function (req, res) {
 
   db.query(updateBookQuery, (err, result) => {
     if (err)
-      return res.status(200).json({ message: err });
+      return res.status(200).json({ message: "Failed",isSuccess: false });
     else {
       if (result.affectedRows > 0) {
         db.query(deleteBookAuthorQuery, (err, result) => {
           if (err)
-            return res.status(200).json({ message: err });
+            return res.status(200).json({ message: "Failed",isSuccess: false });
           else {
             if (result.affectedRows > 0) {
               let authors = req.body.author;
@@ -249,7 +249,7 @@ exports.updateBooks = function (req, res) {
 
               db.query(updateBookAuthorQuery, [authorarray], (err, result) => {
                 if (err)
-                  return res.status(200).json({ message: err });
+                  return res.status(200).json({ message: "Failed",isSuccess: false });
                 else {
                   if (result.affectedRows > 0) {
                     return res.status(200).json({
@@ -293,7 +293,7 @@ exports.getHistory = function (req, res) {
                       WHERE b.Book_ID=bb.Book_ID AND bb.Member_ID = '"+ req.query.id + "'";
   db.query(searchHistoryQuery, (err, result) => {
     if (err)
-      return res.status(500).json({ message: err });
+      return res.status(200).json({ message: "Failed",isSuccess: false });
     else {
       if (result[0]) {
         return res.status(200).json({
@@ -320,7 +320,7 @@ exports.burrowBooks = function (req, res) {
   (Book_ID, Member_ID, Borrow_Date, Return_Date, Return_Status) VALUES ?";
   db.query(addAuthorQuery,[req.body.bookDetails],(err, result) => {
     if (err)
-      return res.status(500).json({ message: err });
+      return res.status(500).json({ message: "Failed",isSuccess: false });
     else {
       if (result.affectedRows > 0) {
         return res.status(200).json({

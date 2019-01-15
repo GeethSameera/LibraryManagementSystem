@@ -54,7 +54,7 @@ exports.viewInfo = function (req, res) {
                       m.Member_ID='" + req.query.id + "' OR m.NIC='" + req.query.id + "'  ";
   db.query(memberInsertionQuery, (err, result) => {
     if (err) 
-      return res.status(500).json({ message: result });
+      return res.status(500).json({ message: "Failed" });
     else {
       if (result[0]) {
         return res.status(200).json({
@@ -111,7 +111,7 @@ exports.registerMember = function (req, res) {
           '" + req.body.member.m_lastName + "',\
           '" + req.body.member.m_gender + "',\
           '" + req.body.member.m_dob + "',\
-          '" + req.body.member.m_expiryDate + "',\
+          '" + req.body.member.m_registerDate + "',\
           '" + req.body.member.m_nic + "',\
           '" + req.body.member.m_memberType + "',\
           '" + req.body.member.m_mobile + "',\
@@ -175,7 +175,7 @@ exports.updateMember = function (req, res) {
                       LName='" + req.body.LName + "',\
                       Gender='" + req.body.Gender + "',\
                       DOB='" + req.body.DOB + "',\
-                      Registration_Date='" + req.body.Expire_Date + "',\
+                      Registration_Date='" + req.body.Registration_Date + "',\
                       NIC='" + req.body.NIC + "',\
                       Member_Type='" + req.body.Member_Type + "',\
                       Mobile='" + req.body.Mobile + "',\
@@ -222,6 +222,33 @@ exports.updateMember = function (req, res) {
       else {
         return res.status(200).json({
           message: "Member Update Failed",
+          isSuccess: false
+        });
+      }
+    }
+  });
+}
+
+/* ### get_NIC_list ## */
+exports.getIDList = function (req, res) {
+  let nicSearchQuery = "\
+                      SELECT NIC\
+                      FROM member ";
+  db.query(nicSearchQuery, (err, result) => {
+    if (err)
+      return res.status(500).json({ message: err });
+    else {
+      if (result[0]) {
+        return res.status(200).json({
+          nicList: result,
+          message: "Data Received",
+          isSuccess: true
+        });
+      }
+      else {
+        return res.status(200).json({
+          nicList: "Empty",
+          message: "No data found",
           isSuccess: false
         });
       }

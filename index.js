@@ -13,6 +13,7 @@ var emailRouter = require('./routes/email');
 
 var authorRouter = require('./routes/author');
 var publisherRouter = require('./routes/publisher');
+var reportsRouter = require('./routes/report');
 //sql
 const con = mysql.createConnection({
   host: "localhost",
@@ -45,7 +46,7 @@ app.use('/donator/',donatorRouter);
 app.use('/email/',emailRouter);
 app.use('/author/',authorRouter);
 app.use('/publisher/',publisherRouter);
-
+app.use('/reports/',reportsRouter);
 app.listen(port, (err) => {
   if (err) {
     return console.log('something bad happened', err)

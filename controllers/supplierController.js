@@ -89,7 +89,7 @@ exports.registerSupplier = function (req, res) {
   db.query(addSupplierQuery, (err, result) => {
     if (err)
       return res.status(200).json({
-         message: "Registration Failed",
+         message: "Failed",
          isSuccess: false
         });
     else {
@@ -121,7 +121,7 @@ exports.updateSupplier = function (req, res) {
   db.query(updateSupplierQuery, (err, result) => {
     if (err)
       return res.status(200).json({ 
-        message: err,
+        message: "Failed",
         isSuccess: false
       });
     else {

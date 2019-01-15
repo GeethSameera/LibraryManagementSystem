@@ -50,7 +50,7 @@ exports.addAuthor = function (req, res) {
   db.query(addAuthorQuery, (err, result) => {
     if (err)
       return res.status(200).json({
-         message: err,
+         message: "Failed",
          isSuccess: false
         });
     else {
@@ -74,7 +74,7 @@ exports.getAuthorList= function (req, res) {
                       FROM author ";
   db.query(authorSearchQuery, (err, result) => {
     if (err)
-      return res.status(500).json({ message: err });
+      return res.status(200).json({ message: "Failed",isSuccess: false });
     else {
       if (result[0]) {
         return res.status(200).json({

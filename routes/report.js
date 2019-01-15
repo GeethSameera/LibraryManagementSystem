@@ -4,9 +4,8 @@ var express = require('express');
 var router = express.Router();
 var app = express();
 var bodyParser = require('body-parser');
-var cors = require('cors')
-// var Job  = require('../models/job');
-var memberController  = require('../controllers/memberController');
+var cors = require('cors');
+var reportController  = require('../controllers/reportController');
 
 app.use(cors())
 router.use(cors())
@@ -30,10 +29,11 @@ router.use(function (req, res, next) {
   next();
 });
 
-router.get('/viewDetails',memberController.viewInfo);
-router.post('/register',memberController.registerMember);
-router.put('/update',memberController.updateMember);
-router.get('/getniclist',memberController.getIDList);
+router.get('/getmemberdetails',reportController.getMemberList);
+router.get('/getreservationhistory',reportController.getReservationHistory);
+router.get('/getpaymentshistory',reportController.getPaymentsHistory);
+router.get('/getprogresshistory',reportController.getProgressHistory);
+router.get('/getbookhistory',reportController.getAvailabilityHistory);
 
 module.exports = router;
 

@@ -58,10 +58,10 @@ exports.sendEmail = function (req, res) {
 
   // setup email data with unicode symbols
   let mailOptions = {
-      from: '"Pannala Public Libaray" <pannalalibrary@yahoo.com>', // sender address
-      to: 'geethsameera077@gmail.com', // list of receivers
-      subject: 'Thanking For The Donations', // Subject line
-      text: 'Hello world', // plain text body
+      from: '"Pannala Libaray" <pannalalibrary@yahoo.com>', // sender address
+      to: req.body.email, // list of receivers
+      subject: req.body.subject, // Subject line
+      text: req.body.message, // plain text body
       // html: '<b>Hello world?</b>' // html body
   };
 
@@ -70,14 +70,14 @@ exports.sendEmail = function (req, res) {
       if (error) {
         return res.status(200).json({
           emailStatus: "Failed",
-          message: "Sending UnSuccessful",
+          message: "Email Sending UnSuccessful",
           isSuccess: false
         });
       }
       else{
         return res.status(200).json({
           emailStatus: "Success",
-          message: "Sending Successful",
+          message: "Email Sending Successful",
           isSuccess: true
         });
       }

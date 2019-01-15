@@ -84,7 +84,7 @@ exports.registerDonator = function (req, res) {
   db.query(addDonatorQuery, (err, result) => {
     if (err)
       return res.status(200).json({
-         message: err,
+         message: "Failed",
          isSuccess: false
         });
     else {

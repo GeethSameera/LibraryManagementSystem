@@ -50,7 +50,7 @@ exports.addPublisher = function (req, res) {
   db.query(addPublisherQuery, (err, result) => {
     if (err)
       return res.status(200).json({
-         message: err,
+         message: "Failed",
          isSuccess: false
         });
     else {

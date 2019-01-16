@@ -129,6 +129,7 @@ exports.getProgressHistory = function (req, res) {
   let searchHistoryQuery = "\
   SELECT \
   (SELECT COUNT(Book_ID) FROM `book` WHERE Date BETWEEN '"+req.query.fromDate+"' AND '"+req.query.toDate+"') as Book_Count, \
+  (SELECT COUNT(Book_ID) FROM `book_borrow` WHERE Borrow_Date BETWEEN '"+req.query.fromDate+"' AND '"+req.query.toDate+"') as Issued_Book_Count,\
   (SELECT SUM(Amount) FROM `payment` WHERE Date BETWEEN '"+req.query.fromDate+"' AND '"+req.query.toDate+"') as Total_Levy,\
   (SELECT COUNT(Member_ID) FROM `member` WHERE Registration_Date BETWEEN '"+req.query.fromDate+"' AND '"+req.query.toDate+"' AND Member_Type='Student') as Student_Member_Count,\
   (SELECT COUNT(Member_ID) FROM `member` WHERE Registration_Date BETWEEN '"+req.query.fromDate+"' AND '"+req.query.toDate+"' AND Member_Type='Adult') as Adult_Member_Count ";

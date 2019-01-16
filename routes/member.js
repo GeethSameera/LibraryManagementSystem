@@ -34,6 +34,8 @@ router.get('/viewDetails',memberController.viewInfo);
 router.post('/register',memberController.registerMember);
 router.put('/update',memberController.updateMember);
 router.get('/getniclist',memberController.getIDList);
+router.get('/clearreservations',memberController.removeReservations);
+router.get('/updatereservations',memberController.UpdateReservations);
 
 module.exports = router;
 

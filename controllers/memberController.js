@@ -53,7 +53,7 @@ exports.viewInfo = function (req, res) {
                       WHERE m.Guarantor_ID=g.Guarantor_ID AND m.Member_ID=ma.Member_ID AND\
                       m.Member_ID='" + req.query.id + "' OR m.NIC='" + req.query.id + "'  ";
   db.query(memberInsertionQuery, (err, result) => {
-    if (err) 
+    if (err)
       return res.status(500).json({ message: "Failed" });
     else {
       if (result[0]) {
@@ -96,7 +96,7 @@ exports.registerMember = function (req, res) {
   db.query(addGuarantorQuery, (err, result) => {
     // console.log(req.query.userName)
     if (err)
-      return res.status(200).json({ 
+      return res.status(200).json({
         message: "Registration Failed",
         isSuccess: false
       });
@@ -122,9 +122,9 @@ exports.registerMember = function (req, res) {
         db.query(addMemberQuery, (err, result_m) => {
           if (err)
             return res.status(200).json({
-               message: "Registration Failed",
-               isSuccess: false
-               });
+              message: "Registration Failed",
+              isSuccess: false
+            });
           else {
             let memberAddressQuery = "\
             INSERT INTO member_address\
@@ -137,9 +137,9 @@ exports.registerMember = function (req, res) {
             db.query(memberAddressQuery, (err, result) => {
               if (err)
                 return res.status(200).json({
-                   message: "Registration Failed",
-                   isSuccess: false
-               });
+                  message: "Registration Failed",
+                  isSuccess: false
+                });
               else {
                 if (result.affectedRows > 0) {
                   return res.status(200).json({
@@ -196,12 +196,12 @@ exports.updateMember = function (req, res) {
                       G_Mobile='" + req.body.G_Mobile + "'\
                       WHERE Guarantor_ID='"+ req.body.Guarantor_ID + "' ";
   db.query(updateMemberQuery, (err, result) => {
-    if (err) 
+    if (err)
       return res.status(500).json({ message: "Member Update Failed" });
     else {
       if (result.affectedRows > 0) {
         db.query(updateGuaranterQuery, (err, result) => {
-          if (err) 
+          if (err)
             return res.status(500).json({ message: err });
           else {
             if (result.affectedRows > 0) {
@@ -210,7 +210,7 @@ exports.updateMember = function (req, res) {
                 isSuccess: true
               });
             }
-            else{
+            else {
               return res.status(200).json({
                 message: "Member Update Failed",
                 isSuccess: false
@@ -243,6 +243,78 @@ exports.getIDList = function (req, res) {
           nicList: result,
           message: "Data Received",
           isSuccess: true
+        });
+      }
+      else {
+        return res.status(200).json({
+          nicList: "Empty",
+          message: "No data found",
+          isSuccess: false
+        });
+      }
+    }
+  });
+}
+
+/* ### Remove Reservations ## */
+exports.removeReservations = function (req, res) {
+  let bookIDList=[];
+  let reservationQuery = "\
+                      DELETE \
+                      FROM book_reservation WHERE Member_ID='"+ req.query.id + "' ";
+  let selectBookID ="SELECT Book_ID FROM book_reservation WHERE Member_ID='"+ req.query.id + "' ";                    
+  db.query(selectBookID, (err, result) => {
+    if (err)
+      return res.status(200).json({ message: "Failed",isSuccess:false });
+    else {
+      if (result[0]) {
+        bookIDList=result;
+        db.query(reservationQuery, (err, result) => {
+          if (err)
+            return res.status(200).json({ message: "Failed",isSuccess:false });
+          else {
+            return res.status(200).json({
+              bookList:bookIDList,
+              message: "Success",
+              isSuccess: true
+            });
+          }
+        });
+      }
+      else {
+        return res.status(200).json({
+          nicList: "Empty",
+          message: "No data found",
+          isSuccess: false
+        });
+      }
+    }
+  });
+}
+
+/* ### Get All Reservations ## */
+exports.UpdateReservations = function (req, res) {
+  let bookIDList=[];
+  let selectBookID ="SELECT Book_ID FROM book_reservation WHERE Expire_Date < CURDATE() "; 
+  let reservationQuery = "\
+                      DELETE \
+                      FROM book_reservation WHERE Expire_Date < CURDATE()";
+  db.query(selectBookID, (err, result) => {
+    if (err)
+      return res.status(200).json({ message: "Failed",isSuccess:false });
+    else {
+      if (result[0]) {
+        bookIDList=result;
+        db.query(reservationQuery, (err, result) => {
+          if (err)
+            return res.status(200).json({ message: "Failed",isSuccess:false });
+          else {
+            return res.status(200).json({
+              bookList:bookIDList,
+              message: "Success",
+              isSuccess: true
+            });
+          }
         });
       }
       else {

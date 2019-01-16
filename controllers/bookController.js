@@ -144,7 +144,7 @@ exports.getBookCategoryList = function (req, res) {
 
 /* ### Add Books ## */
 exports.addbook = function (req, res) {
-  console.log(req.body);
+  // console.log(req.body);
   let addBookQuery = "\
                           INSERT INTO book\
                           (ISBN, Book_Name, Language, Category, Type, Price, Publisher, Edition, Date, No_of_copies, Supplier_ID,Available_copies)\
@@ -174,14 +174,13 @@ exports.addbook = function (req, res) {
         let authors = req.body.author;
         let authorarray = [];
         authors.forEach(element => {
-          console.log(result.insertId);
-          console.log(element);
+          // console.log(result.insertId);
+          // console.log(element);
           authorarray.push(new Array(result.insertId, element));
         });
         let addAuthorQuery = "\
         INSERT INTO book_author\
         (Book_ID, Author_ID) VALUES ?";
-        console.log("233r234" + authorarray);
         db.query(addAuthorQuery, [authorarray], (err, result_a) => {
           if (err)
             return res.status(200).json({
@@ -320,7 +319,7 @@ exports.burrowBooks = function (req, res) {
   (Book_ID, Member_ID, Borrow_Date, Return_Date, Return_Status) VALUES ?";
   db.query(addAuthorQuery,[req.body.bookDetails],(err, result) => {
     if (err)
-      return res.status(500).json({ message: "Failed",isSuccess: false });
+      return res.status(200).json({ message: "Failed",isSuccess: false });
     else {
       if (result.affectedRows > 0) {
         return res.status(200).json({

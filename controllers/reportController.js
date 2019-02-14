@@ -183,3 +183,109 @@ exports.getAvailabilityHistory = function (req, res) {
     }
   });
 }
+
+/* ### get_dashboard data ## */
+exports.getDashboardData = function (req, res) {
+  let getDonutGraphData = "\
+                      SELECT bc.Name,b.No_of_copies \
+                      FROM book b,book_category bc\
+                      WHERE b.Category=bc.Category_ID\
+                      GROUP BY bc.Name";
+
+  let getTileData="SELECT \
+                    (SELECT COUNT(Member_ID) FROM member WHERE Expire_Date > NOW()) AS Active_Members,\
+                    (SELECT COUNT(Available_copies) FROM book) AS Available_Books,\
+                    (SELECT COUNT(No_of_copies) FROM book) AS Total_Books,\
+                    (SELECT COUNT(Donor_ID) FROM donator) AS Donators\
+                    ;"   
+
+  let getBarGraphDate="SELECT\
+                      ( SELECT CONCAT(SUBSTR(MONTHNAME(DATE_SUB(NOW(), INTERVAL 1 MONTH)),1,3),YEAR(DATE_SUB(NOW(), INTERVAL 1 MONTH)),'-',CAST(COUNT(Member_ID) AS CHAR))\
+                      FROM member\
+                      WHERE Registration_Date BETWEEN  DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MONTH), '%Y-%m-01') AND DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 0 MONTH), '%Y-%m-01'))\
+                      AS sixth,\
+                      ( SELECT CONCAT(SUBSTR(MONTHNAME(DATE_SUB(NOW(), INTERVAL 2 MONTH)),1,3),YEAR(DATE_SUB(NOW(), INTERVAL 2 MONTH)),'-',CAST(COUNT(Member_ID) AS CHAR))\
+                      FROM member\
+                      WHERE Registration_Date BETWEEN  DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 2 MONTH), '%Y-%m-01') AND DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 MONTH), '%Y-%m-01'))\
+                      AS fifth,\
+                      ( SELECT CONCAT(SUBSTR(MONTHNAME(DATE_SUB(NOW(), INTERVAL 3 MONTH)),1,3),YEAR(DATE_SUB(NOW(), INTERVAL 3 MONTH)),'-',CAST(COUNT(Member_ID) AS CHAR))\
+                      FROM member\
+                      WHERE Registration_Date BETWEEN  DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 3 MONTH), '%Y-%m-01') AND DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 2 MONTH), '%Y-%m-01'))\
+                      AS fourth,\
+                      ( SELECT CONCAT(SUBSTR(MONTHNAME(DATE_SUB(NOW(), INTERVAL 4 MONTH)),1,3),YEAR(DATE_SUB(NOW(), INTERVAL 4 MONTH)),'-',CAST(COUNT(Member_ID) AS CHAR))\
+                      FROM member\
+                      WHERE Registration_Date BETWEEN  DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 4 MONTH), '%Y-%m-01') AND DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 3 MONTH), '%Y-%m-01'))\
+                      AS third,\
+                      ( SELECT CONCAT(SUBSTR(MONTHNAME(DATE_SUB(NOW(), INTERVAL 5 MONTH)),1,3),YEAR(DATE_SUB(NOW(), INTERVAL 5 MONTH)),'-',CAST(COUNT(Member_ID) AS CHAR))\
+                      FROM member\
+                      WHERE Registration_Date BETWEEN  DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 5 MONTH), '%Y-%m-01') AND DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 4 MONTH), '%Y-%m-01'))\
+                      AS second,\
+                      ( SELECT CONCAT(SUBSTR(MONTHNAME(DATE_SUB(NOW(), INTERVAL 6 MONTH)),1,3),YEAR(DATE_SUB(NOW(), INTERVAL 6 MONTH)),'-',CAST(COUNT(Member_ID) AS CHAR))\
+                      FROM member\
+                      WHERE Registration_Date BETWEEN  DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 6 MONTH), '%Y-%m-01') AND DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 5 MONTH), '%Y-%m-01'))\
+                      AS first\
+                      ;"        
+
+  let donutGraphData;
+  let tileData;
+  let barGraphData;                  
+  db.query(getDonutGraphData, (err, result) => {
+    if (err)
+      return res.status(500).json({ message: err });
+    else {
+      if (result[0]) {
+        donutGraphData=result;
+        db.query(getTileData, (err, result) => {
+          if (err)
+            return res.status(500).json({ message: err });
+          else {
+            if (result[0]) {
+              tileData=result;
+              db.query(getBarGraphDate, (err, result) => {
+                if (err)
+                  return res.status(500).json({ message: err });
+                else {
+                  if (result[0]) {
+                    barGraphData=result;
+                    // console.log(typeof(barGraphData));
+                    return res.status(200).json({
+                      dashboardData: {
+                        donutData:donutGraphData,
+                        tiles:tileData,
+                        barData:barGraphData
+                      },
+                      message: "Data Received",
+                      isSuccess: true
+                    });
+                  }
+                  else {
+                    return res.status(200).json({
+                      dashboardData: "Empty",
+                      message: "No data found",
+                      isSuccess: false
+                    });
+                  }
+                }
+              });
+            }
+            else {
+              return res.status(200).json({
+                dashboardData: "Empty",
+                message: "No data found",
+                isSuccess: false
+              });
+            }
+          }
+        });
+
+      }
+      else {
+        return res.status(200).json({
+          dashboardData: "Empty",
+          message: "No data found",
+          isSuccess: false
+        });
+      }
+    }
+  });
+}

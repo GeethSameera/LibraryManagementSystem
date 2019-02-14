@@ -58,7 +58,7 @@ exports.sendEmail = function (req, res) {
 
   // setup email data with unicode symbols
   let mailOptions = {
-      from: '"Pannala Libaray" <pannalalibrary@yahoo.com>', // sender address
+      from: '"Pannala Library" <pannalalibrary@yahoo.com>', // sender address
       to: req.body.email, // list of receivers
       subject: req.body.subject, // Subject line
       text: req.body.message, // plain text body

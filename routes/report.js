@@ -34,6 +34,7 @@ router.get('/getreservationhistory',reportController.getReservationHistory);
 router.get('/getpaymentshistory',reportController.getPaymentsHistory);
 router.get('/getprogresshistory',reportController.getProgressHistory);
 router.get('/getbookhistory',reportController.getAvailabilityHistory);
+router.get('/getdashboarddata',reportController.getDashboardData);
 
 module.exports = router;
 

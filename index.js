@@ -4,6 +4,8 @@ var mysql = require('mysql');
 var bodyParser = require('body-parser');
 
 const port = 3000
+
+//Referring to files in routes folder
 var loginRouter = require('./routes/login');
 var memberRouter = require('./routes/member');
 var bookRouter = require('./routes/book');
@@ -38,6 +40,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
+// Main Routings
 app.use('/', loginRouter);
 app.use('/member/',memberRouter);
 app.use('/book/',bookRouter);
@@ -47,6 +50,8 @@ app.use('/email/',emailRouter);
 app.use('/author/',authorRouter);
 app.use('/publisher/',publisherRouter);
 app.use('/reports/',reportsRouter);
+
+
 app.listen(port, (err) => {
   if (err) {
     return console.log('something bad happened', err)
